@@ -2,11 +2,17 @@ import validateOptions from 'schema-utils';
 
 import schema from './plugin-options.json';
 
-const pluginName = 'mini-css-process-webpack-plugin';
+const PLUGIN_NAME = 'css-async-process-webpack-plugin';
+const PRE_PLUGIN_NAME = 'mini-css-extract-plugin';
 
-class MiniCssProcessPlugin {
+const error = msg => {
+  console.error(`\u001b[31mERROR: [${PLUGIN_NAME}] ${msg}\u001b[39m`);
+  process.exit(1);
+};
+
+class CssAsyncProcessWebpackPlugin {
   constructor(options = {}) {
-    validateOptions(schema, options, 'Mini CSS Process Webpack Plugin');
+    validateOptions(schema, options, 'CSS Async Process Webpack Plugin');
 
     this.options = Object.assign(
       {
@@ -17,12 +23,18 @@ class MiniCssProcessPlugin {
   }
 
   apply(compiler) {
-    compiler.hooks.thisCompilation.tap(pluginName, (compilation) => {
+    compiler.hooks.thisCompilation.tap(PLUGIN_NAME, (compilation) => {
 
       const { mainTemplate } = compilation;
 
+      const isValid = this.validateEnvironment(mainTemplate);
+      if (!isValid) {
+        error(`Error running ${PLUGIN_NAME}, are you sure you have ${PRE_PLUGIN_NAME} before it in your webpack config's plugins?`)
+        return;
+      }
+
       mainTemplate.hooks.requireEnsure.tap(
-        pluginName,
+        PLUGIN_NAME,
         (source, chunk, hash) => {
 
           const { process } = this.options;
@@ -41,6 +53,15 @@ class MiniCssProcessPlugin {
       );
     });
   }
+
+  validateEnvironment(mainTemplate) {
+    if (mainTemplate.hooks.requireEnsure.taps && mainTemplate.hooks.requireEnsure.taps.length > 0) {
+      return !!mainTemplate.hooks.requireEnsure.taps.find(function (tap) {
+        return tap.name === PRE_PLUGIN_NAME;
+      })
+    }
+    return false;
+  }
 }
 
-export default MiniCssProcessPlugin;
+export default CssAsyncProcessWebpackPlugin;

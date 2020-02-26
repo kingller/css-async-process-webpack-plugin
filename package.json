@@ -1,8 +1,9 @@
 {
-  "name": "mini-css-process-webpack-plugin",
+  "name": "css-async-process-webpack-plugin",
   "version": "1.0.0",
   "description": "",
   "keywords": [
+    "async",
     "css",
     "extract",
     "mini",
@@ -10,13 +11,13 @@
     "process",
     "webpack"
   ],
-  "homepage": "https://github.com/kingller/mini-css-process-webpack-plugin",
+  "homepage": "https://github.com/kingller/css-async-process-webpack-plugin",
   "bugs": {
-    "url": "https://github.com/kingller/mini-css-process-webpack-plugin/issues"
+    "url": "https://github.com/kingller/css-async-process-webpack-plugin/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:kingller/mini-css-process-webpack-plugin.git"
+    "url": "git@github.com:kingller/css-async-process-webpack-plugin.git"
   },
   "license": "MIT",
   "author": {
@@ -45,6 +46,7 @@
     "del-cli": "^1.1.0"
   },
   "peerDependencies": {
+    "mini-css-extract-plugin": ">=0.1.0",
     "webpack": ">=4.0.0"
   },
   "engines": {
