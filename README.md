@@ -32,6 +32,7 @@ module.exports = {
 }
 ```
 
+
 ## Options
 
 ### process
@@ -42,9 +43,9 @@ You can change the logic by setting `process`.
 
 
 ```javascript
-        new CssAsyncProcessWebpackPlugin({
-            process: (source) => {
-                return source.replace(/head.appendChild\(linkTag\);/, 'head.insertBefore(linkTag, document.getElementById("less:theme:color"));');
-            }
-        }),
+new CssAsyncProcessWebpackPlugin({
+    process: (source) => {
+        return source.replace(/head.appendChild\(linkTag\);/, 'head.insertBefore(linkTag, document.getElementById("less:theme:color"));');
+    }
+}),
 ```
