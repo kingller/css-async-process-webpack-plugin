@@ -50,7 +50,7 @@ class CssAsyncProcessWebpackPlugin {
           }
         } else {
           if (source) {
-            return source.replace(/head.appendChild\(linkTag\);/, 'head.insertBefore(linkTag, document.getElementById("less:theme:color"));');
+            return source.replace(/head.appendChild\(linkTag\)/, 'head.insertBefore(linkTag, document.getElementById("less:theme:color"))');
           }
         }
 
