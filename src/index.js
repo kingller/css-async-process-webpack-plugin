@@ -4,6 +4,7 @@ import schema from './plugin-options.json';
 
 const PLUGIN_NAME = 'css-async-process-webpack-plugin';
 const PRE_PLUGIN_NAME = 'mini-css-extract-plugin';
+const PRE_PLUGIN_CONSTRUCTOR_NAME = 'MiniCssExtractPlugin';
 
 const error = msg => {
   console.error(`\u001b[31mERROR: [${PLUGIN_NAME}] ${msg}\u001b[39m`);
@@ -27,7 +28,7 @@ class CssAsyncProcessWebpackPlugin {
 
       const { mainTemplate } = compilation;
 
-      const isValid = this.validateEnvironment(mainTemplate);
+      const isValid = this.validateEnvironment(compiler);
       if (!isValid) {
         error(`Error running ${PLUGIN_NAME}, are you sure you have ${PRE_PLUGIN_NAME} before it in your webpack config's plugins?`)
         return;
@@ -54,11 +55,11 @@ class CssAsyncProcessWebpackPlugin {
     });
   }
 
-  validateEnvironment(mainTemplate) {
-    if (mainTemplate.hooks.requireEnsure.taps && mainTemplate.hooks.requireEnsure.taps.length > 0) {
-      return !!mainTemplate.hooks.requireEnsure.taps.find(function (tap) {
-        return tap.name === PRE_PLUGIN_NAME;
-      })
+  validateEnvironment(compiler) {
+    if (compiler.options.plugins && compiler.options.plugins.length > 0) {
+      return !!compiler.options.plugins.find(function (plugin) {
+        return plugin.constructor.name === PRE_PLUGIN_CONSTRUCTOR_NAME;
+      });
     }
     return false;
   }
